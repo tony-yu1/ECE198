@@ -117,7 +117,7 @@ int main(void)
   double fuelUsed;
   double fuelEfficiency = 0.000089; //liters per meter (average default value)
   double carbonEmissions;
-  string fuelType = gasoline;
+  string fuelType = "gasoline";
 
   //target CO2 emissions limit
   double target = 0.0005; //for testing purposes only
