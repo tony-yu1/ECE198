@@ -100,12 +100,53 @@ int main(void)
   /* USER CODE END 2 */
 
   /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
+  //final values for carbon emission (in kg) per litre of fuel consumed for each fuel type:
+  final double gasoline = 2.3;
+  final double ethanol = 2.26;
+  final double bioDiesel = 0.7;
+  final double diesel = 2.7;
+  
+  //variables for calculating the displacement
+  double instantaneousAcceleration;
+  double frequency = 0.01; //1/100ms
+  double instantaneousVelocity;
+  double instantaneousDisplacement;
+  double displacement; //in metres
+  
+  //variables that should be changed according to each car
+  double fuelUsed;
+  double fuelEfficiency = 0.000089; //liters per meter (average default value)
+  double carbonEmissions;
+  string fuelType = gasoline;
+
+  //target CO2 emissions limit
+  double target = 0.0005; //for testing purposes only
+
   while (1)
   {
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
+	  //instantaneousAcceleration = HAL_GPIO_TogglePin(GPIOA, ADC);
+	  instantaneousVelocity = frequency * instantaneousAcceleration;
+	  instantaneousDisplacement = frequency * instantaneousVelocity;
+	  displacement += instantaneousDisplacement;
+	  
+	  fuelUsed = displacement * fuelEfficiency;
+	  if(fuelType == "gasoline") {
+		  carbonEmissions = gasoline * fuelUsed;
+	  }
+	  else if(fuelType == "ethanol") {
+		  carbonEmissions = ethanol * fuelUsed;
+	  }
+	  else if(fuelType == "bioDiesel") {
+		  carbonEmissions = bioDiesel * fuelUsed;
+	  }
+	  else if(fuelType == "diesel") {
+		  carbonEmissions = diesel * fuelUsed;
+	  }
+	  
+	  if(carbonEmissions >= target) {
+		  //turn on light
+	  }
+	  HAL_Delay(100); //delays the system by 0.1 second
   }
   /* USER CODE END 3 */
 }
