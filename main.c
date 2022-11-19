@@ -122,7 +122,7 @@ int main(void)
   //target CO2 emissions limit
   double target = 0.0005; //for testing purposes only
 
-  while (1)
+  while (1) //zara test
   {
 	  //instantaneousAcceleration = HAL_GPIO_TogglePin(GPIOA, ADC);
 	  instantaneousVelocity = frequency * instantaneousAcceleration;
