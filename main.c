@@ -138,7 +138,7 @@ void MPU6050_Init (void) {
 
 }
 */
-
+/*
 void MPU6050_Read_Accel (void)
 {
 	uint8_t Rec_Data[6];
@@ -161,7 +161,7 @@ void MPU6050_Read_Accel (void)
 	Az = Accel_Z_RAW/16384.0;
 
 }
-
+*/
 /* USER CODE END 0 */
 
 /**
@@ -224,30 +224,78 @@ int main(void)
 
   while (1) //zara test
   {
-	  //instantaneousAcceleration = HAL_GPIO_TogglePin(GPIOA, ADC);
-	  instantaneousVelocity = frequency * instantaneousAcceleration;
-	  instantaneousDisplacement = frequency * instantaneousVelocity;
-	  displacement += instantaneousDisplacement;
-	  
-	  fuelUsed = displacement * fuelEfficiency;
-	  if(fuelType == "gasoline") {
-		  carbonEmissions = gasoline * fuelUsed;
+		uint8_t Rec_Data[6];
+		// Read 6 BYTES of data starting from ACCEL_XOUT_H register
+
+		HAL_I2C_Mem_Read (&hi2c1, MPU6050_ADDR, ACCEL_XOUT_H_REG, 1, Rec_Data, 6, 1000);
+
+		int16_t Accel_X_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data [1]);
+		int16_t Accel_Y_RAW = (int16_t)(Rec_Data[2] << 8 | Rec_Data [3]);
+		int16_t Accel_Z_RAW = (int16_t)(Rec_Data[4] << 8 | Rec_Data [5]);
+
+		/*** convert the RAW values into acceleration in 'g
+		we have to divide according to the Full scale value set in FS_SEL
+		I have configured FS_SEL = 0. So I am dividing by 16384.0
+
+		for more details check ACCEL_CONFIG Register ****/
+
+		int16_t Ax = Accel_X_RAW/16384.0;
+		int16_t Ay = Accel_Y_RAW/16384.0;
+		int16_t Az = Accel_Z_RAW/16384.0;
+
+	  if(Ax > 0) {
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(1000);
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(1000);
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(1000);
 	  }
-	  else if(fuelType == "ethanol") {
-		  carbonEmissions = ethanol * fuelUsed;
+
+	  if(Ay > 0) {
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(2000);
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(2000);
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(2000);
 	  }
-	  else if(fuelType == "bioDiesel") {
-		  carbonEmissions = bioDiesel * fuelUsed;
+	  if(Az > 0) {
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(3000);
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(3000);
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(3000);
 	  }
-	  else if(fuelType == "diesel") {
-		  carbonEmissions = diesel * fuelUsed;
+	  if(Ax < 0) {
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(4000);
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(4000);
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(4000);
 	  }
-	  
-	  if(carbonEmissions >= target) {
-		  //turn on light
+
+	  if(Ay < 0) {
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(5000);
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(5000);
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(5000);
 	  }
-	  HAL_Delay(100); //delays the system by 0.1 second
-  }
+	  if(Az < 0) {
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(6000);
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(6000);
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		HAL_Delay(6000);
+	  }
+
+	  HAL_Delay(20000);
+
   /* USER CODE END 3 */
 }
 
