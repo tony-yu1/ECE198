@@ -75,6 +75,42 @@ static void MX_TIM1_Init(void);
 
 
 
+void MPU6050_Init(void) {
+
+    uint8_t check, Data;
+    HAL_StatusTypeDef status = HAL_I2C_IsDeviceReady(&hi2c1, MPU6050_ADDR, 10,
+            i2c_timeout);
+    if (status != HAL_OK) {
+        printf("Is Ready: %d \n", status);
+    }
+
+// check device ID WHO_AM_I
+    HAL_I2C_Mem_Read(&hi2c1, MPU6050_ADDR, WHO_AM_I_REG, 1, &check, 1, 1000);
+    if (check == 104) // 0x68 will be returned by the sensor if everything goes well
+            {
+// power management register 0X6B we should write all 0's to wake the sensor up
+        Data = 0;
+        HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, PWR_MGMT_1_REG, 1, &Data, 1,
+                i2c_timeout);
+// Set DATA RATE of 1KHz by writing SMPLRT_DIV register
+        Data = 0x07;
+        HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, SMPLRT_DIV_REG, 1, &Data, 1,
+                i2c_timeout);
+// Set accelerometer configuration in ACCEL_CONFIG Register
+// XA_ST=0; YA_ST=0; ZA_ST=0; FS_SEL=0 -> +: 2g
+        Data = 0x00;
+        HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, ACCEL_CONFIG_REG, 1, &Data, 1,
+                i2c_timeout);
+// Set Guroscopic configuration in GYRO_CONFIG Register
+// XG_ST=0; YG_ST=0; ZG_ST=0; FS_SEL=0 -> +/- 250 °/s
+        Data = 0x00;
+        HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, GYRO_CONFIG_REG, 1, &Data, 1,
+                i2c_timeout);
+
+    }
+}
+
+/*
 void MPU6050_Init (void) {
 	uint8_t check, Data;
 
@@ -86,21 +122,22 @@ void MPU6050_Init (void) {
 	{
 		// power management register OX6B we should write all 0's to wake the sensor up
 		Data = 0;
-		HAL_I2C_Mem_Write(&hi2cl, MPU6050_ADDR, PWR_MGMT_1_REG, 1, &Data, 1, 1000);
+		HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, PWR_MGMT_1_REG, 1, &Data, 1, 1000);
 
 		// Set DATA RATE of 1KHz by writing SMPLRT_DIV register
 		Data = 0x07;
-		HAL_I2C_Mem_Write(&hi2cl, MPU6050_ADDR, SMPLRT_DIV_REG, 1, &Data, 1, 1000);
+		HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, SMPLRT_DIV_REG, 1, &Data, 1, 1000);
 
 		// Set accelerometer configuration in ACCEL_CONFIG Register
 		// XA_ST=0,YA_ST=0,ZA ST=0, FS_SEL=0 -> + 2g
 
 		Data = 0x00;
 
-		HAL_I2C_Mem_Write(&hi2cl, MPU6050_ADDR, ACCEL_CONFIG_REG, 1, Data, 1, 1000);
+		HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, ACCEL_CONFIG_REG, 1, Data, 1, 1000);
 	}
 
 }
+*/
 
 void MPU6050_Read_Accel (void)
 {
