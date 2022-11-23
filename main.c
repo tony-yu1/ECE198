@@ -229,9 +229,9 @@ int main(void)
 
 		HAL_I2C_Mem_Read (&hi2c1, MPU6050_ADDR, ACCEL_XOUT_H_REG, 1, Rec_Data, 6, 1000);
 
-		int16_t Accel_X_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data [1]);
-		int16_t Accel_Y_RAW = (int16_t)(Rec_Data[2] << 8 | Rec_Data [3]);
-		int16_t Accel_Z_RAW = (int16_t)(Rec_Data[4] << 8 | Rec_Data [5]);
+		double Accel_X_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data [1]);
+		double Accel_Y_RAW = (int16_t)(Rec_Data[2] << 8 | Rec_Data [3]);
+		double Accel_Z_RAW = (int16_t)(Rec_Data[4] << 8 | Rec_Data [5]);
 
 		/*** convert the RAW values into acceleration in 'g
 		we have to divide according to the Full scale value set in FS_SEL
@@ -239,41 +239,33 @@ int main(void)
 
 		for more details check ACCEL_CONFIG Register ****/
 
-		int16_t Ax = Accel_X_RAW/16384.0;
-		int16_t Ay = Accel_Y_RAW/16384.0;
-		int16_t Az = Accel_Z_RAW/16384.0;
+		double Ax = Accel_X_RAW/16384.0;
+		double Ay = Accel_Y_RAW/16384.0;
+		double Az = Accel_Z_RAW/16384.0;
 
-	  if(Ax > 0) {
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(1000);
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+    double magnitude = sqrt(pow(Ax, 2) + pow(Ay, 2));
+    
+    double instantaneousVelocity = frequency * magnitude;
+	  double instantaneousDisplacement = frequency * instantaneousVelocity;
+	  double displacement += instantaneousDisplacement;
+	  
+	  fuelUsed = displacement * fuelEfficiency;
+	  if(fuelType == "gasoline") {
+		  carbonEmissions = gasoline * fuelUsed;
 	  }
-
-	  if(Ay > 0) {
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(2000);
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	  else if(fuelType == "ethanol") {
+		  carbonEmissions = ethanol * fuelUsed;
 	  }
-	  if(Az > 0) {
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(3000);
+	  else if(fuelType == "bioDiesel") {
+		  carbonEmissions = bioDiesel * fuelUsed;
 	  }
-	  if(Ax < 0) {
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(4000);
+	  else if(fuelType == "diesel") {
+		  carbonEmissions = diesel * fuelUsed;
 	  }
-
-	  if(Ay < 0) {
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(5000);
+	  
+	  if(carbonEmissions >= target) {
+		  //turn on light
 	  }
-	  if(Az < 0) {
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(6000);
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	  }
-
-	  HAL_Delay(20000);
 
   /* USER CODE END 3 */
 }
