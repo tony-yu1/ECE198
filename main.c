@@ -244,6 +244,7 @@ int main(void)
 		double Az = Accel_Z_RAW/16384.0;
 
     double magnitude = sqrt(pow(Ax, 2) + pow(Ay, 2));
+
     
     double instantaneousVelocity = frequency * magnitude;
 	  double instantaneousDisplacement = frequency * instantaneousVelocity;
