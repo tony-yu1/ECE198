@@ -247,32 +247,18 @@ int main(void)
 		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 		HAL_Delay(1000);
 		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(1000);
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(1000);
 	  }
 
 	  if(Ay > 0) {
 		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 		HAL_Delay(2000);
 		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(2000);
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(2000);
 	  }
 	  if(Az > 0) {
 		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 		HAL_Delay(3000);
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(3000);
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(3000);
 	  }
 	  if(Ax < 0) {
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(4000);
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(4000);
 		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 		HAL_Delay(4000);
 	  }
@@ -280,18 +266,11 @@ int main(void)
 	  if(Ay < 0) {
 		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 		HAL_Delay(5000);
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(5000);
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(5000);
 	  }
 	  if(Az < 0) {
 		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 		HAL_Delay(6000);
 		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(6000);
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_Delay(6000);
 	  }
 
 	  HAL_Delay(20000);
