@@ -229,9 +229,9 @@ int main(void)
 
 		HAL_I2C_Mem_Read (&hi2c1, MPU6050_ADDR, ACCEL_XOUT_H_REG, 1, Rec_Data, 6, 1000);
 
-		double Accel_X_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data [1]);
-		double Accel_Y_RAW = (int16_t)(Rec_Data[2] << 8 | Rec_Data [3]);
-		double Accel_Z_RAW = (int16_t)(Rec_Data[4] << 8 | Rec_Data [5]);
+		 double Accel_X_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data [1]);
+		 double Accel_Y_RAW = (int16_t)(Rec_Data[2] << 8 | Rec_Data [3]);
+	   double Accel_Z_RAW = (int16_t)(Rec_Data[4] << 8 | Rec_Data [5]);
 
 		/*** convert the RAW values into acceleration in 'g
 		we have to divide according to the Full scale value set in FS_SEL
