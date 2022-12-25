@@ -265,8 +265,11 @@ int main(void)
 	  }
 	  
 	  if(carbonEmissions >= target) {
-		  //turn on light
+		  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		  HAL_Delay(1000);
 	  }
+
+    HAL_Delay(100);
 
   /* USER CODE END 3 */
 }
